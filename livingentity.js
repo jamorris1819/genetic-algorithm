@@ -7,6 +7,7 @@ class LivingEntity extends Entity {
         this.alive = true;
         this.timeAlive = 0;
         this.size = 10;
+        this.DNA = new DNA(null);
     }
 
     update(deltaTime) {
@@ -17,7 +18,7 @@ class LivingEntity extends Entity {
         // Calculate energy use.
         var energyCost = deltaTime * (1 + (this.velocity / 20));
         this.energy -= energyCost;
-        console.log(this.energy);
+
         // If energy is 0 then die.
         if(this.energy <= 0) {
             this.energy = 0;

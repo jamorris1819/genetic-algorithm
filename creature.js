@@ -3,6 +3,8 @@ class Creature extends LivingEntity {
         super(position);
         this.velocity = 1;
         this.maxSpeed = 100;
+
+        this.brain = new Brain(3, [4], 2);
     }
 
     draw(context) {
