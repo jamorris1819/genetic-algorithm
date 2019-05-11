@@ -1,4 +1,5 @@
 var lastTime = 0; // Used for delta time.
+var creature;
 
 window.onload = function(){
 	canvas = document.getElementById('gc');
@@ -10,6 +11,7 @@ window.onload = function(){
 
 function initialise() {
     lastTime = Date.now();
+    creature = new Creature(new Vector(500, 500));
 }
 
 function gameLoop() {
@@ -27,11 +29,13 @@ function gameLoop() {
 }
 
 function update(deltaTime) {
-
+    creature.update(deltaTime);
 }
 
 function draw() {
     // Fill background
     context.fillStyle = '#333333';
-	context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    
+    creature.draw(context);
 }

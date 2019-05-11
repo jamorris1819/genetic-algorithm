@@ -1,0 +1,3 @@
+class Plant extends LivingEntity {
+    
+}
