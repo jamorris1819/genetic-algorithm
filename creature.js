@@ -2,30 +2,52 @@ class Creature extends LivingEntity {
     constructor(position, dna) {
         super(position);
         this.velocity = 1;
-        this.maxSpeed = 30;
         this.type = EntityType.CREATURE;
         this.debug = false;
         this.target = null;
         this.data = null;
-        this.maxEnergy = 50;
+        this.initPosition = position;
 
         this.rotation = Math.random() * Math.PI * 2;
+        this.reproduce = false;
+        this.reproduceClock = 0;
+
+        var hiddenLayers;
 
         if(dna === undefined){
-            this.brain = new Brain(5, [16, 8, 5], 3);
-            this.DNA = new DNA(this.brain.network.toJSON(), this.DNA.getCharData());
+            var tempDNA = new DNA([]);
+            var brainSetup = tempDNA.getCharData();
+            hiddenLayers = brainSetup["hiddenLayers"];
+            this.brain = new Brain(7, hiddenLayers, 3);
+            this.DNA = new DNA(this.brain.network.toJSON(), brainSetup);
         }
         else {
             this.DNA = dna;
+            hiddenLayers = dna.getCharData()["hiddenLayers"];
             this.brain = new Brain(dna);
         }
+        
+        this.maxEnergy = 1000;
+        this.energy = this.maxEnergy;
+        this.maxSpeed = this.DNA.speed;
+
+        var id = "";
+        for(var i = 0; i < hiddenLayers.length; i++) {
+            id += hiddenLayers[i].toString();
+        }
+        var pattern = GeoPattern.generate(id);
+        this.pattern = new Image();
+        this.pattern.src = pattern.toDataUri();
     }
 
     draw(context) {
         context.beginPath();
+        context.fillStyle = context.createPattern(this.pattern, "repeat");
 		context.arc(this.position.getX(), this.position.getY(), this.DNA.size, 0, 2 * Math.PI);
-		context.fillStyle = "brown";
+        var offset = this.initPosition.subtract(this.position);
+        context.translate(-offset.getX(), -offset.getY());
 		context.fill();
+        context.translate(offset.getX(), offset.getY());
     }
 
     update(deltaTime, entities) {
@@ -39,14 +61,22 @@ class Creature extends LivingEntity {
         var decisionData = this.brain.process(processingData);
         this.data = [processingData, decisionData];
         this.act(decisionData, deltaTime);
+
+        if(this.reproduceClock > 30 && this.totalEaten > 0) {
+            this.reproduce = true;
+            this.reproduceClock = 0;
+        } else {
+            this.reproduceClock += deltaTime;
+        }
     }
 
     checkForFood(edibleEntities) {
         for(var i = 0; i < edibleEntities.length; i++) {
             if(edibleEntities[i][1]["distance"] < this.DNA.size * 1.5) {
                 // Eat
-                this.energy = 100;
+                this.energy = this.maxEnergy;
                 console.log("Food was eaten");
+                this.totalEaten++;
                 edibleEntities[i][0].alive = false;
             }
         }
@@ -69,11 +99,15 @@ class Creature extends LivingEntity {
         this.target = closestEdible;
 
         var normDistance = (this.DNA.viewDistance - distance) / this.DNA.viewDistance;
-        var normAngle = ((angle / Math.PI) + 1) / 2;
+        var aLeft = (angle < 0) ? Math.abs(angle) / this.DNA.peripheralFov : 0;
+        var aRight = (angle > 0) ? Math.abs(angle) / this.DNA.peripheralFov : 0;
+        var focus = Math.abs(angle) > this.DNA.peripheralFov ? 0 : 1;
 
         return [
             normDistance, // Normalised distance to nearest food.
-            normAngle,          
+            aLeft,
+            aRight,      // Normalised angle to nearest food.
+            focus,     // Whether nearest food is in focused vision.
             this.energy / this.maxEnergy,
             this.timeAlive / 100,
             this.velocity / this.maxSpeed
@@ -99,7 +133,7 @@ class Creature extends LivingEntity {
             
             if(viewData["distance"] === 0) continue;
 
-            if(entities[i].DNA.size < this.DNA.size * 0.5) {
+            if(entities[i].type === EntityType.PLANT || entities[i].DNA.size < this.DNA.size * 0.5) {
                 edibleEntities.push(data);
             }
             else {

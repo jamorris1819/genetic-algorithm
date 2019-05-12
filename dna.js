@@ -11,24 +11,38 @@ class DNA {
             this.size = charData["size"];
             this.fov = charData["fov"];
             this.viewDistance = charData["viewDistance"];
+            this.peripheralFov = this.fov / 3;
+            this.hiddenLayers = charData["hiddenLayers"];
+            this.speed = charData["speed"];
         }
     }
 
     getCharData() {
         return {
-            size: this.size,
-            fov: this.fov,
-            viewDistance: this.viewDistance
+            size: this.mutateGeneChance(this.size),
+            fov: this.mutateGeneChance(this.fov),
+            viewDistance: this.mutateGeneChance(this.viewDistance),
+            peripheralFov: this.peripheralFov,
+            hiddenLayers: this.hiddenLayers,
+            speed: this.mutateGeneChance(this.speed)
         };
     }
 
     generateData() {
         this.size = 10;
         this.fov = Math.PI / 2;
+        this.peripheralFov = this.fov / 3;
         this.viewDistance = 500;
         this.colorR = 255
         this.colorG = 255;
         this.colorB = 255;
+        this.speed = 30;
+
+        this.hiddenLayers = [];
+        var hiddenLayerCount = Math.ceil(Math.random() * 4)
+        for(var i = 0; i < hiddenLayerCount; i++) {
+            this.hiddenLayers.push(Math.ceil(Math.random() * 25));
+        }
     }
 
     clone() {
@@ -80,8 +94,8 @@ class DNA {
         }
 
         return [
-            this.mutate(connectionWeights),
-            this.mutate(biases)
+            this.mutateSequence(connectionWeights),
+            this.mutateSequence(biases)
         ];
     }
 
@@ -102,7 +116,7 @@ class DNA {
      * Mutates an array of genes.
      * @param {object[]} data - Array of genes
      */
-    mutate(data) {
+    mutateSequence(data) {
         for(var i = 0; i < data.length; i++) {
             var random = Math.random();
             if(random < 0.4) data[i] = this.mutateGene(data[i], random);
@@ -118,6 +132,14 @@ class DNA {
      */
     mutateGene(gene, severity) {
         var sign = Math.random() < 0.5 ? 1 : -1;
-        return gene * (1 + (0.5 - severity) * sign)
+        return gene * (1 + (0.5 - severity) * sign);
+    }
+
+    mutateGeneChance(gene) {
+        var random = Math.random();
+        var sign = Math.random() < 0.5 ? 1 : -1;
+        if(random < 0.4) gene = gene * (1 + (0.5 - random) * sign);
+
+        return gene;
     }
 }

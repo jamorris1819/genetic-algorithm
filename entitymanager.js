@@ -12,11 +12,13 @@ class EntityManager {
         entities.push(new Creature(position));
     }
 
-    static createCreatureFromDNA(dna) {
-        var padding = 100;
-        var x = padding + ((1920 - (padding * 2)) * Math.random());
-        var y = padding + ((1080 - (padding * 2)) * Math.random());
-        var position = new Vector(x, y);
+    static createCreatureFromDNA(dna, position) {
+        if(position === undefined){
+            var padding = 100;
+            var x = padding + ((1920 - (padding * 2)) * Math.random());
+            var y = padding + ((1080 - (padding * 2)) * Math.random());
+            position = new Vector(x, y);
+        }
         var creature = new Creature(position, dna);
 
         entities.push(creature);
@@ -42,6 +44,15 @@ class EntityManager {
     static update(deltaTime) {
         for(var i = 0; i < entities.length; i++) {
             entities[i].update(deltaTime, entities);
+
+            if (entities[i].type === EntityType.CREATURE) {
+                if(entities[i].reproduce) {
+                    entities[i].reproduce = false;
+
+                    var DNA = entities[i].DNA.clone();
+                    this.createCreatureFromDNA(DNA, entities[i].position);
+                }
+            }
         }
 
         if(entities.length > 0) {
@@ -52,8 +63,8 @@ class EntityManager {
 
         // Make sure there are enough plants.
         var plantCount = entities.filter(x => x.type == EntityType.PLANT);
-        if(plantCount < 40) {
-            for(var i = 0; i < 40 - plantCount; i++) {
+        if(plantCount.length < 40) {
+            for(var i = 0; i < 40 - plantCount.length; i++) {
                 this.createPlant();
             }
         }
@@ -62,15 +73,7 @@ class EntityManager {
         var creatureCount = entities.filter(x => x.type == EntityType.CREATURE);
         if(creatureCount.length < 10) {
             for(var i = 0; i < 10 - creatureCount.length; i++) {
-                if(this.dnaScores.length > 2) {
-                    var best = this.dnaScores[0][0].clone();
-                    var secondBest = this.dnaScores[1][0].clone();
-                    var cross = best.cross(secondBest);
-
-                    this.createCreatureFromDNA(cross);
-                } else {
-                    this.createCreature();
-                }
+                this.createCreature();
             }
         }
 

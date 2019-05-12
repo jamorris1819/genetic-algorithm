@@ -14,6 +14,9 @@ function initialise() {
 
     //EntityManager.createCreature(new Vector(300, 300));
     //EntityManager.createPlant(new Vector(400, 300));
+	for(var i = 0; i < 20; i++) {
+		EntityManager.createCreature();
+	}
 }
 
 function gameLoop() {
@@ -87,6 +90,7 @@ function renderInfo() {
         
         context.fillText("Dist : " + dist, 50, 150);
         context.fillText("Angl : " + ang, 50, 180);
+        context.fillText("Ener : " + creature.energy, 50, 210);
     }
 }
 
@@ -100,6 +104,20 @@ function renderCone(creature) {
 	var p1 = creature.position;
 	var p2 = creature.position.add(leftPoint);
 	var p3 = creature.position.add(rightPoint);
+
+	context.beginPath();
+	context.moveTo(p1.getX(), p1.getY());
+	context.lineTo(p2.getX(), p2.getY());
+	context.lineTo(p3.getX(), p3.getY());
+    context.fill();
+    
+    context.fillStyle = "rgba(255, 0, 0, 0.2)";
+    leftPoint = (new Vector(length, 0)).rotate(creature.rotation - (creature.DNA.peripheralFov / 2));
+	rightPoint = (new Vector(length, 0)).rotate(creature.rotation + (creature.DNA.peripheralFov / 2));
+
+	p1 = creature.position;
+	p2 = creature.position.add(leftPoint);
+	p3 = creature.position.add(rightPoint);
 
 	context.beginPath();
 	context.moveTo(p1.getX(), p1.getY());

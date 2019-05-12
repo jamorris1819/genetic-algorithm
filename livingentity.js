@@ -7,6 +7,7 @@ class LivingEntity extends Entity {
         this.energy = this.maxEnergy;
         this.alive = true;
         this.timeAlive = 0;
+        this.totalEaten = 0;
         this.DNA = new DNA(null);
     }
 
@@ -15,9 +16,10 @@ class LivingEntity extends Entity {
 
         this.timeAlive += deltaTime;
         super.update(deltaTime);
-
+        
         // Calculate energy use.
-        var energyCost = deltaTime * (1 + (this.velocity / 20));
+        var energyCost = deltaTime * ((1 + (this.velocity * this.velocity)) / 20) * (this.DNA.size * this.DNA.size * this.DNA.size);
+        energyCost /= 1000;
         this.energy -= energyCost;
 
         // If energy is 0 then die.
