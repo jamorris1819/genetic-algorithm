@@ -3,16 +3,17 @@ class LivingEntity extends Entity {
         super(position);
 
         // Define needs.
-        this.energy = 100;
+        this.maxEnergy = 100;
+        this.energy = this.maxEnergy;
         this.alive = true;
         this.timeAlive = 0;
-        this.size = 10;
         this.DNA = new DNA(null);
     }
 
     update(deltaTime) {
         if(!this.alive) return; 
 
+        this.timeAlive += deltaTime;
         super.update(deltaTime);
 
         // Calculate energy use.
