@@ -27,7 +27,7 @@ class Creature extends LivingEntity {
             this.brain = new Brain(dna);
         }
         
-        this.maxEnergy = 1000;
+        this.maxEnergy = 300;
         this.energy = this.maxEnergy;
         this.maxSpeed = this.DNA.speed;
 
@@ -62,9 +62,10 @@ class Creature extends LivingEntity {
         this.data = [processingData, decisionData];
         this.act(decisionData, deltaTime);
 
-        if(this.reproduceClock > 30 && this.totalEaten > 0) {
+        if(this.reproduceClock > 30 && this.totalEaten > 2) {
             this.reproduce = true;
             this.reproduceClock = 0;
+            this.totalEaten = 0;
         } else {
             this.reproduceClock += deltaTime;
         }

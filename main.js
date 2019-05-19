@@ -67,8 +67,7 @@ function renderInfo() {
     context.beginPath();
     context.arc(creature.position.getX(), creature.position.getY(), creature.DNA.size, 0, 2 * Math.PI);
     context.fillStyle = "white";
-    context.fill();
-
+    creature.draw(context)
     // Render some data.
     context.fillStyle = '#DEDEDE';
 	context.font = "30px Arial";
