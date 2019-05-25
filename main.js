@@ -12,11 +12,11 @@ window.onload = function(){
 function initialise() {
     lastTime = Date.now();
 
-    //EntityManager.createCreature(new Vector(300, 300));
+    EntityManager.createCreature(new Vector(600, 300));
     //EntityManager.createPlant(new Vector(400, 300));
-	for(var i = 0; i < 20; i++) {
+	/*for(var i = 0; i < 20; i++) {
 		EntityManager.createCreature();
-	}
+	}*/
 }
 
 function gameLoop() {

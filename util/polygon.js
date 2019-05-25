@@ -70,6 +70,9 @@ var Polygon = (function () {
             pContext.quadraticCurveTo(this.getPoints()[i].getX(),
                 this.getPoints()[i].getY(), this.getPoints()[i + 1].getX(),
                 this.getPoints()[i + 1].getY());
+            pContext.quadraticCurveTo(this.getPoints()[i + 1].getX(),
+                this.getPoints()[i + 1].getY(), this.getPoints()[0].getX(),
+                this.getPoints()[0].getY());
         } else {
             for (i = 1; i < this.getPoints().length; i += 1) {
                 pContext.lineTo(this.getPoints()[i].getX(), this.getPoints()[i].getY());
@@ -77,12 +80,14 @@ var Polygon = (function () {
             pContext.lineTo(this.getPoints()[0].getX(), this.getPoints()[0].getY());
         }
 
-        if (this.getFillStyle() !== 0) {
+        if(this.getFillStyle() === 0 && this.getStrokeStyle() === 0) {
+            pContext.fill()
+        }
+        else if (this.getFillStyle() !== 0) {
             pContext.fillStyle = this.getFillStyle();
             pContext.fill();
         }
-
-        if (this.getStrokeStyle() !== 0) {
+        else if (this.getStrokeStyle() !== 0) {
             pContext.strokeStyle = this.getStrokeStyle();
             pContext.stroke();
         }

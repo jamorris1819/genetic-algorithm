@@ -16,6 +16,7 @@ var Vector = (function () {
     Vector.prototype.getY = function () {
         return this.mY;
     };
+    
     Vector.prototype.setY = function (pY) {
         this.mY = pY;
     };

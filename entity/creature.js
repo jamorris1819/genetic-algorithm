@@ -12,6 +12,8 @@ class Creature extends LivingEntity {
         this.reproduce = false;
         this.reproduceClock = 0;
 
+        this.body = new BodyPart();
+
         var hiddenLayers;
 
         if(dna === undefined){
@@ -46,7 +48,8 @@ class Creature extends LivingEntity {
 		context.arc(this.position.getX(), this.position.getY(), this.DNA.size, 0, 2 * Math.PI);
         var offset = this.initPosition.subtract(this.position);
         context.translate(-offset.getX(), -offset.getY());
-		context.fill();
+        //context.fill();
+        this.body.draw(context, this.position);
         context.translate(offset.getX(), offset.getY());
     }
 
