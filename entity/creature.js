@@ -22,10 +22,10 @@ class Creature extends LivingEntity {
         this.rotation = Math.random() * Math.PI * 2;
         this.reproduce = false;
         this.reproduceClock = 0; 
-
-        this.maxEnergy = 300;
-        this.energy = this.maxEnergy;
         this.maxSpeed = this.DNA.speed;
+
+        this.maxEnergy = 400 * (this.DNA.size * this.DNA.size * this.DNA.size);
+        this.energy = this.maxEnergy;
     }
 
     /**
@@ -60,6 +60,7 @@ class Creature extends LivingEntity {
         }
         var pattern = GeoPattern.generate(id);
         this.pattern = new Image();
+        this.patternOG = pattern;
         this.pattern.src = pattern.toDataUri();
     }
 

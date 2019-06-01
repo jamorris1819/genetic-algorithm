@@ -18,8 +18,7 @@ class LivingEntity extends Entity {
         super.update(deltaTime);
         
         // Calculate energy use.
-        var energyCost = deltaTime * (1 + this.velocity) * (this.DNA.size * this.DNA.size);
-        energyCost /= 1000;
+        var energyCost = this.cost();
         this.energy -= energyCost;
 
         // If energy is 0 then die.
@@ -27,5 +26,15 @@ class LivingEntity extends Entity {
             this.energy = 0;
             this.alive = false;
         }
+    }
+
+    /**
+     * Calculate energy cost.
+     */
+    cost() {
+        var velocity = this.velocity * this.velocity;
+        var size = this.DNA.size * this.DNA.size * this.DNA.size;
+
+        return ((velocity + 5) * size) * 0.0001;
     }
 }

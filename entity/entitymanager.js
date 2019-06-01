@@ -70,7 +70,7 @@ class EntityManager {
 
         // Spawn creatures
         var creatureCount = entities.filter(x => x.type == EntityType.CREATURE);
-        for(var i = 0; i < 10 - creatureCount.length; i++) {
+        for(var i = 0; i < 20 - creatureCount.length; i++) {
             this.createCreature();
         }
 
