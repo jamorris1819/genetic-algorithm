@@ -1,6 +1,17 @@
 class Creature extends LivingEntity {
     constructor(position, dna) {
         super(position);
+        var hiddenLayers = this.setupDNA(dna);   
+        this.initialise(position);
+        this.generatePattern(hiddenLayers);
+
+        this.body = new BodyPart(hiddenLayers, this.DNA.size);
+    }
+
+    /**
+     * Initialise important variables.
+     */
+    initialise(position) {
         this.velocity = 1;
         this.type = EntityType.CREATURE;
         this.debug = false;
@@ -10,10 +21,19 @@ class Creature extends LivingEntity {
 
         this.rotation = Math.random() * Math.PI * 2;
         this.reproduce = false;
-        this.reproduceClock = 0;
+        this.reproduceClock = 0; 
 
+        this.maxEnergy = 300;
+        this.energy = this.maxEnergy;
+        this.maxSpeed = this.DNA.speed;
+    }
+
+    /**
+     * Initialises the DNA if it doesn't exist, and sets it if it does.
+     * @param {Object} dna 
+     */
+    setupDNA(dna) {
         var hiddenLayers;
-
         if(dna === undefined){
             var tempDNA = new DNA([]);
             var brainSetup = tempDNA.getCharData();
@@ -26,13 +46,14 @@ class Creature extends LivingEntity {
             hiddenLayers = dna.getCharData()["hiddenLayers"];
             this.brain = new Brain(dna);
         }
-        
-        this.body = new BodyPart(this.DNA.brainData.neurons[0].bias, this.DNA.size);
 
-        this.maxEnergy = 300;
-        this.energy = this.maxEnergy;
-        this.maxSpeed = this.DNA.speed;
+        return hiddenLayers;
+    }
 
+    /**
+     * Generates the pattern of the creature.
+     */
+    generatePattern(hiddenLayers) {
         var id = "";
         for(var i = 0; i < hiddenLayers.length; i++) {
             id += hiddenLayers[i].toString();
@@ -45,9 +66,6 @@ class Creature extends LivingEntity {
     draw(context) {
         context.save();
         context.fillStyle = context.createPattern(this.pattern, "repeat");
-        var offset = this.initPosition.subtract(this.position);
-        //context.translate(offset.getX(), offset.getY());
-        //context.fill();
         this.body.draw(context, this.position, this.rotation);
         context.restore();
     }
@@ -120,9 +138,14 @@ class Creature extends LivingEntity {
     act(decision, deltaTime) {
         // Choose turning angle.
         this.rotation += deltaTime * (decision[1] - decision[0]);
+        // If forward decision is at least 0.15 then move forward.
         this.velocity = decision[2] > 0.15 ? decision[2] * this.maxSpeed : 0;
     }
 
+    /**
+     * Processes all the entities available to it, and returns a list of edible & non-edible entites.
+     * @param {Object[]} entities 
+     */
     processVision(entities) {
         var viewData = null;
         var edibleEntities = [];
@@ -148,6 +171,10 @@ class Creature extends LivingEntity {
         return [edibleEntities, otherEntities];
     }
 
+    /**
+     * Calculate whether an object is in view, and if so what it's angle & distance is.
+     * @param {Object} entity 
+     */
     view(entity) {
         var positionDelta = entity.position.subtract(this.position);
         var direction = (new Vector(1, 0)).rotate(this.rotation);

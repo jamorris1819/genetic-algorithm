@@ -45,6 +45,7 @@ class EntityManager {
         for(var i = 0; i < entities.length; i++) {
             entities[i].update(deltaTime, entities);
 
+            // Process creature reproduction.
             if (entities[i].type === EntityType.CREATURE) {
                 if(entities[i].reproduce) {
                     entities[i].reproduce = false;
@@ -55,26 +56,22 @@ class EntityManager {
             }
         }
 
+        // Set the oldest surviving creature to debug.
         if(entities.length > 0) {
-            
             var filter = entities.filter(x => x.type === EntityType.CREATURE);
             if(filter.length > 0) filter[0].debug = true;
         }
 
         // Make sure there are enough plants.
         var plantCount = entities.filter(x => x.type == EntityType.PLANT);
-        if(plantCount.length < 20) {
-            for(var i = 0; i < 30 - plantCount.length; i++) {
-                this.createPlant();
-            }
+        for(var i = 0; i < 30 - plantCount.length; i++) {
+            this.createPlant();
         }
 
         // Spawn creatures
         var creatureCount = entities.filter(x => x.type == EntityType.CREATURE);
-        if(creatureCount.length < 10) {
-            for(var i = 0; i < 10 - creatureCount.length; i++) {
-                this.createCreature();
-            }
+        for(var i = 0; i < 10 - creatureCount.length; i++) {
+            this.createCreature();
         }
 
         // Remove the dead

@@ -2,6 +2,7 @@ class BodyPart {
     constructor(seed, size) {
         this.seed = seed;
         this.size = size;
+        this.noise = new tumult.Perlin1(this.seed);
         this.points = this.generatePoints();
         this.polygon = new Polygon(this.points, 0, 0, false);
     }
@@ -11,7 +12,6 @@ class BodyPart {
         var segmentCount = 16;
         var segmentSize = Math.PI / segmentCount;
         var points = [];
-        noise.seed(0);
 
         // Generate extrusion length.
         var extrusions = [];
@@ -50,7 +50,6 @@ class BodyPart {
     }
 
     generateNoise(x) {
-        var myNoise = new tumult.Perlin1(this.seed);
-        return myNoise.gen(x);
+        return this.noise.gen(x);
     }
 }
