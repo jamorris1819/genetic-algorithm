@@ -42,7 +42,6 @@ class EntityManager {
     }
 
     static update(deltaTime) {
-        return;
         for(var i = 0; i < entities.length; i++) {
             entities[i].update(deltaTime, entities);
 

@@ -53,8 +53,11 @@ var Polygon = (function () {
         return this.mFillStyle;
     };
 
-    Polygon.prototype.draw = function (pContext) {
+    Polygon.prototype.draw = function (pContext, rotation) {
         var i, middlePoint;
+        if(typeof rotation === "undefined") rotation = 0;
+        pContext.save();
+        pContext.rotate(rotation);
         pContext.beginPath();
         pContext.lineWidth = 5;
         pContext.moveTo(this.getPoints()[0].getX(), this.getPoints()[0].getY());
@@ -70,9 +73,9 @@ var Polygon = (function () {
             pContext.quadraticCurveTo(this.getPoints()[i].getX(),
                 this.getPoints()[i].getY(), this.getPoints()[i + 1].getX(),
                 this.getPoints()[i + 1].getY());
-            pContext.quadraticCurveTo(this.getPoints()[i + 1].getX(),
+            /*pContext.quadraticCurveTo(this.getPoints()[i + 1].getX(),
                 this.getPoints()[i + 1].getY(), this.getPoints()[0].getX(),
-                this.getPoints()[0].getY());
+                this.getPoints()[0].getY());*/
         } else {
             for (i = 1; i < this.getPoints().length; i += 1) {
                 pContext.lineTo(this.getPoints()[i].getX(), this.getPoints()[i].getY());
@@ -91,6 +94,7 @@ var Polygon = (function () {
             pContext.strokeStyle = this.getStrokeStyle();
             pContext.stroke();
         }
+        pContext.restore();
     };
 
     return Polygon;

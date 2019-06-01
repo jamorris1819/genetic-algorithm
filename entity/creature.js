@@ -12,8 +12,6 @@ class Creature extends LivingEntity {
         this.reproduce = false;
         this.reproduceClock = 0;
 
-        this.body = new BodyPart();
-
         var hiddenLayers;
 
         if(dna === undefined){
@@ -29,6 +27,8 @@ class Creature extends LivingEntity {
             this.brain = new Brain(dna);
         }
         
+        this.body = new BodyPart(this.DNA.brainData.neurons[0].bias, this.DNA.size);
+
         this.maxEnergy = 300;
         this.energy = this.maxEnergy;
         this.maxSpeed = this.DNA.speed;
@@ -43,14 +43,13 @@ class Creature extends LivingEntity {
     }
 
     draw(context) {
-        context.beginPath();
+        context.save();
         context.fillStyle = context.createPattern(this.pattern, "repeat");
-		context.arc(this.position.getX(), this.position.getY(), this.DNA.size, 0, 2 * Math.PI);
         var offset = this.initPosition.subtract(this.position);
-        context.translate(-offset.getX(), -offset.getY());
+        //context.translate(offset.getX(), offset.getY());
         //context.fill();
-        this.body.draw(context, this.position);
-        context.translate(offset.getX(), offset.getY());
+        this.body.draw(context, this.position, this.rotation);
+        context.restore();
     }
 
     update(deltaTime, entities) {
