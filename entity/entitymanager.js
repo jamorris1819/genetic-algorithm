@@ -62,7 +62,7 @@ class EntityManager {
         }
 
         // Make sure there are enough plants.
-        /*var plantCount = entities.filter(x => x.type == EntityType.PLANT);
+        var plantCount = entities.filter(x => x.type == EntityType.PLANT);
         if(plantCount.length < 20) {
             for(var i = 0; i < 30 - plantCount.length; i++) {
                 this.createPlant();
@@ -78,7 +78,7 @@ class EntityManager {
         }
 
         // Remove the dead
-        this.processDead();*/
+        this.processDead();
     }
 
     static saveDNA(dna, score) {
