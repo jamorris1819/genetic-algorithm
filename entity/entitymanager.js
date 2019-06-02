@@ -64,7 +64,7 @@ class EntityManager {
 
         // Make sure there are enough plants.
         var plantCount = entities.filter(x => x.type == EntityType.PLANT);
-        for(var i = 0; i < 30 - plantCount.length; i++) {
+        for(var i = 0; i < 20 - plantCount.length; i++) {
             this.createPlant();
         }
 

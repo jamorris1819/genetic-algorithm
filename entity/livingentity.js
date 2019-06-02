@@ -9,6 +9,8 @@ class LivingEntity extends Entity {
         this.timeAlive = 0;
         this.totalEaten = 0;
         this.DNA = new DNA(null);
+
+        this.colour = new Colour(0, 0, 0);
     }
 
     update(deltaTime) {
@@ -16,6 +18,11 @@ class LivingEntity extends Entity {
 
         this.timeAlive += deltaTime;
         super.update(deltaTime);
+
+        if(this.energy === -1) {
+            // Entities with energy set to -1 are invincible.
+            return;
+        }
         
         // Calculate energy use.
         var energyCost = this.cost();
@@ -35,6 +42,6 @@ class LivingEntity extends Entity {
         var velocity = this.velocity * this.velocity;
         var size = this.DNA.size * this.DNA.size * this.DNA.size;
 
-        return ((velocity + 5) * size) * 0.0001;
+        return ((velocity + 5) * size) * 0.00045;
     }
 }

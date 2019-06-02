@@ -84,8 +84,8 @@ function renderInfo() {
     var data = creature.data;
 
     if(data !== null) {
-        var dist = data[0][0];
-        var ang = data[0][1];
+        var dist = data[0]["distance"];
+        var ang = data[0]["angle"];
         
         context.fillText("Dist : " + dist, 50, 150);
         context.fillText("Angl : " + ang, 50, 180);

@@ -15,3 +15,23 @@ function hexToRgb(hex) {
     b: parseInt(result[3], 16)
   } : null;
 }
+
+class Colour {
+    constructor(r, g, b) {
+        if(typeof g === "undefined") {
+            var colour = hexToRgb(r);
+            this.r = colour.r;
+            this.g = colour.g;
+            this.b = colour.b;
+        }
+        else {
+            this.r = r;
+            this.g = g;
+            this.b = b;
+        }
+    }
+
+    toStyle() {
+        return rgbToHex(this.r, this.g, this.b);
+    }
+}
