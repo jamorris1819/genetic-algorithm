@@ -43,6 +43,10 @@ class EntityManager {
 
     static update(deltaTime) {
         for(var i = 0; i < entities.length; i++) {
+            var entityPosition = entities[i].position;
+            entities[i].outsideArea = (entityPosition.getX() < 0 || entityPosition.getX() > 1920
+            || entityPosition.getY() < 0 || entityPosition.getY() > 1080);
+
             entities[i].update(deltaTime, entities);
 
             // Process creature reproduction.
@@ -64,7 +68,7 @@ class EntityManager {
 
         // Make sure there are enough plants.
         var plantCount = entities.filter(x => x.type == EntityType.PLANT);
-        for(var i = 0; i < 20 - plantCount.length; i++) {
+        for(var i = 0; i < 40 - plantCount.length; i++) {
             this.createPlant();
         }
 

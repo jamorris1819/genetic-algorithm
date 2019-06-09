@@ -4,7 +4,6 @@ class Creature extends LivingEntity {
         var hiddenLayers = this.setupDNA(dna);   
         this.initialise(position);
         this.generatePattern(hiddenLayers);
-
         this.body = new BodyPart(hiddenLayers, this.DNA.size);
     }
 
@@ -67,6 +66,7 @@ class Creature extends LivingEntity {
     draw(context) {
         context.save();
         context.fillStyle = context.createPattern(this.pattern, "repeat");
+        context.strokeStyle = colourDarken(this.colour).toStyle();
         this.body.draw(context, this.position, this.rotation);
         context.restore();
     }
@@ -147,7 +147,8 @@ class Creature extends LivingEntity {
                 dangerDistance: normDangerDistance,
                 energy: this.energy / this.maxEnergy,
                 timeAlive: this.timeAlive / 100,
-                velocity: this.velocity / this.maxSpeed
+                velocity: this.velocity / this.maxSpeed,
+                outsideArea: this.outsideArea ? 1 : 0
            }
         }
 
@@ -179,7 +180,8 @@ class Creature extends LivingEntity {
             dangerDistance: normDangerDistance,
             energy: this.energy / this.maxEnergy,
             timeAlive: this.timeAlive / 100,
-            velocity: this.velocity / this.maxSpeed
+            velocity: this.velocity / this.maxSpeed,
+            outsideArea: this.outsideArea ? 1 : 0
        };
     }
 

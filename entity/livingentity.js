@@ -5,10 +5,12 @@ class LivingEntity extends Entity {
         // Define needs.
         this.maxEnergy = 100;
         this.energy = this.maxEnergy;
+        this.invincible = false;
         this.alive = true;
         this.timeAlive = 0;
         this.totalEaten = 0;
         this.DNA = new DNA(null);
+        this.outsideArea = false;
 
         this.colour = new Colour(0, 0, 0);
     }
@@ -19,7 +21,7 @@ class LivingEntity extends Entity {
         this.timeAlive += deltaTime;
         super.update(deltaTime);
 
-        if(this.energy === -1) {
+        if(this.invincible) {
             // Entities with energy set to -1 are invincible.
             return;
         }
@@ -42,6 +44,9 @@ class LivingEntity extends Entity {
         var velocity = this.velocity * this.velocity;
         var size = this.DNA.size * this.DNA.size * this.DNA.size;
 
-        return ((velocity + 5) * size) * 0.00045;
+        var cost = ((velocity + 5) * size) * 0.00045;
+        if(this.outsideArea) cost *= 3.5;
+        
+        return cost;
     }
 }

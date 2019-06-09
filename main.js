@@ -1,16 +1,24 @@
 var lastTime = 0; // Used for delta time.
 var entities = [];
+var dirtTexture;
 
 window.onload = function(){
 	canvas = document.getElementById('gc');
 	context = canvas.getContext("2d");
 
-	initialise();
+	initialise(context);
 	gameLoop();
 };
 
-function initialise() {
+function initialise(context) {
     lastTime = Date.now();
+
+    
+    var img = new Image();
+    img.src = "img/dirt.jpg";
+    img.onload = function() {
+        dirtTexture = context.createPattern(img, "repeat");
+    }
 
     EntityManager.createCreature(new Vector(600, 300));
     //EntityManager.createPlant(new Vector(400, 300));
@@ -39,7 +47,7 @@ function update(deltaTime) {
 
 function draw() {
     // Fill background
-    context.fillStyle = '#333333';
+    context.fillStyle = dirtTexture;
     context.fillRect(0, 0, canvas.width, canvas.height);
     
     EntityManager.draw(context);

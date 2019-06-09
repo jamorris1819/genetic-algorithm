@@ -32,7 +32,7 @@ class DNA {
         this.size = 10;
         this.fov = Math.PI / 2;
         this.peripheralFov = this.fov / 3;
-        this.viewDistance = 500;
+        this.viewDistance = 250;
         this.colorR = 255
         this.colorG = 255;
         this.colorB = 255;

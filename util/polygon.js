@@ -84,7 +84,8 @@ var Polygon = (function () {
         }
 
         if(this.getFillStyle() === 0 && this.getStrokeStyle() === 0) {
-            pContext.fill()
+            pContext.stroke();
+            pContext.fill();
         }
         else if (this.getFillStyle() !== 0) {
             pContext.fillStyle = this.getFillStyle();

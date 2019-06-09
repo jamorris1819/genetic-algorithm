@@ -16,6 +16,18 @@ function hexToRgb(hex) {
   } : null;
 }
 
+function colourDarken(colour) {
+    colour.r /= 2;
+    colour.g /= 2;
+    colour.b /= 2;
+
+    colour.r = Math.floor(colour.r);
+    colour.g = Math.floor(colour.g);
+    colour.b = Math.floor(colour.b);
+
+    return colour;
+}
+
 class Colour {
     constructor(r, g, b) {
         if(typeof g === "undefined") {
