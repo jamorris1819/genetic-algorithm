@@ -22,6 +22,6 @@ class Brain {
     }
 
     process(inputs) {
-        return this.network.activate(inputs);
+        return this.network.activate(Object.values(inputs));
     }
 }

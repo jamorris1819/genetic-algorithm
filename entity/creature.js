@@ -118,21 +118,42 @@ class Creature extends LivingEntity {
             return a[1]["distance"] - b[1]["distance"];
         }).filter(x => x[1]["visible"]);
 
-        if(edibleEntities.length === 0) return [0, 0, 0, 0, 0, 0, 0, 0, 0];
-
-        var closestEdible = edibleEntities[0];
-        var distance = closestEdible[1]["distance"];
-        var angle = closestEdible[1]["angle"];
+        var closestDanger, dangerDistance, dangerColour;
 
         if(dangerEntities.length > 0) {
-            var closestDanger = dangerEntities[0];
-            var dangerDistance = closestDanger[1]["distance"];
-            var dangerColour = closestDanger[0].colour;
+            closestDanger = dangerEntities[0];
+            dangerDistance = closestDanger[1]["distance"];
+            dangerColour = closestDanger[0].colour;
         } else {
             dangerDistance = 0;
             dangerColour = new Colour(0, 0, 0);
         }
+
         var normDangerDistance = (this.DNA.viewDistance - dangerDistance) / this.DNA.viewDistance;
+
+        if(edibleEntities.length === 0) {
+            return {
+                distance: 0, // Normalised distance to nearest food.
+                angle: 0,      // Normalised angle to nearest food.
+                focus: 0,     // Whether nearest food is in focused vision.
+                // Colour of the nearest edible food.
+                edibleR: 0,
+                edibleG: 0,
+                edibleB: 0,
+                // Colour of the nearest dangerous entity.
+                dangerR: dangerColour.r / 255,
+                dangerG: dangerColour.g / 255,
+                dangerB: dangerColour.b / 255,
+                dangerDistance: normDangerDistance,
+                energy: this.energy / this.maxEnergy,
+                timeAlive: this.timeAlive / 100,
+                velocity: this.velocity / this.maxSpeed
+           }
+        }
+
+        var closestEdible = edibleEntities[0];
+        var distance = closestEdible[1]["distance"];
+        var angle = closestEdible[1]["angle"];
 
         if(this.debug) closestEdible.seen = true;
         this.target = closestEdible;
