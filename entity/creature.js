@@ -96,7 +96,7 @@ class Creature extends LivingEntity {
         for(var i = 0; i < edibleEntities.length; i++) {
             if(edibleEntities[i][1]["distance"] < this.DNA.size * 1.5) {
                 // Eat
-                this.energy = this.maxEnergy;
+                this.energy += this.maxEnergy * 0.25;
                 console.log("Food was eaten");
                 this.totalEaten++;
                 edibleEntities[i][0].alive = false;

@@ -18,6 +18,8 @@ class LivingEntity extends Entity {
     update(deltaTime) {
         if(!this.alive) return; 
 
+        if(this.energy > this.maxEnergy) this.energy = this.maxEnergy;
+
         this.timeAlive += deltaTime;
         super.update(deltaTime);
 
@@ -46,7 +48,7 @@ class LivingEntity extends Entity {
 
         var cost = ((velocity + 5) * size) * 0.00045;
         if(this.outsideArea) cost *= 3.5;
-        
+
         return cost;
     }
 }
