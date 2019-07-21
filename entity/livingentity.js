@@ -46,7 +46,7 @@ class LivingEntity extends Entity {
         var velocity = this.velocity * this.velocity;
         var size = this.DNA.size * this.DNA.size * this.DNA.size;
 
-        var cost = ((velocity + 5) * size) * 0.00045;
+        var cost = ((velocity + 5) * size) * 0.0002;
         if(this.outsideArea) cost *= 3.5;
 
         return cost;
